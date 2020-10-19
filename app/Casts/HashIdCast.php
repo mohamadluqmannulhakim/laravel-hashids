@@ -7,27 +7,18 @@ use Hashids\Hashids;
 
 class HashIdCast implements CastsAttributes
 {
+    protected $hashids;
+
     public function get($model, $key, $value, $attributes)
     {
-        // kalau specify connection keluar error
-        // dd(Hashids::connection($model)->encode(4815162342));
-        // -------------------------------------------
-
-        $hash   = new Hashids();
-        dd("get ", $hash->decode(4815162342));
-        return decrypt($value);
+        $this->hashids = new Hashids($model->table, 5);
+        return $this->hashids->encode($value);
     }
 
     public function set($model, $key, $value, $attributes)
     {
-        // kalau specify connection keluar error
-        // dd(Hashids::connection($model)->encode(4815162342));
-        // -------------------------------------------
-
-        $hash   = new Hashids();
-        dd("set " . $hash->encode(4815162342));
-        return [$key => $hash->encode($value)];
-        return [$key => encrypt($value)];
+        $this->hashids = new Hashids($model->table, 5);
+        return $this->hashids->decode($value);
     }
 }
 

@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 }); */
 
 Route::apiResource('/user', 'UserController');
+Route::apiResource('/vendor', 'VendorController');
