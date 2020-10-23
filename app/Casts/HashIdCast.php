@@ -11,14 +11,14 @@ class HashIdCast implements CastsAttributes
 
     public function get($model, $key, $value, $attributes)
     {
-        $this->hashids = new Hashids($model->table, 5);
+        $this->hashids = new Hashids($model->getTable(), 10);
         return $this->hashids->encode($value);
     }
 
     public function set($model, $key, $value, $attributes)
     {
-        $this->hashids = new Hashids($model->table, 5);
-        return $this->hashids->decode($value);
+        $this->hashids = new Hashids($model->getTable(), 10);
+        return $this->hashids->decode($value)[0];
     }
 }
 

@@ -19,7 +19,8 @@ use Illuminate\Support\Str;
 
 $factory->define(Vendor::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
+        'name'      => $faker->name,
+        'email'     => $faker->unique()->safeEmail,
+        'users_id'  => $faker->numberBetween($min = 1, $max = 10),
     ];
 });

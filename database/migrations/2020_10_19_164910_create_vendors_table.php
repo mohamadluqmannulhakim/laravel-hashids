@@ -17,6 +17,8 @@ class CreateVendorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
+            $table->unsignedBigInteger('users_id');
+            $table->foreign('users_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

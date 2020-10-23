@@ -12,9 +12,13 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $vendors  = Vendor::orderBy('name')->paginate(10);
+        $vendors  = Vendor::when($request->users_id, function($query) use($request){
+                                $query->where('users_id', $request->users_id);
+                            })
+                            ->orderBy('name')
+                            ->paginate(10);
         return response()->json($vendors, 200);
     }
 
