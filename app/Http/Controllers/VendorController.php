@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\HashidsTrait;
 use App\Vendor;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
 {
+    use HashidsTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +18,7 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
+        $request->users_id = $this->getDecode('User', $request->users_id);
         $vendors  = Vendor::when($request->users_id, function($query) use($request){
                                 $query->where('users_id', $request->users_id);
                             })
