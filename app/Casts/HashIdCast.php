@@ -18,7 +18,7 @@ class HashIdCast implements CastsAttributes
     public function set($model, $key, $value, $attributes)
     {
         $this->hashids = new Hashids('', 10);
-        return $this->hashids->decode($value)[0];
+        return isset( $this->hashids->decode($value)[0] ) ? $this->hashids->decode($value)[0] : $value;
     }
 }
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\HashidsTrait;
 use App\Vendor;
-use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Validator;
 
 class VendorController extends Controller
 {
@@ -18,7 +18,7 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        $request->users_id = $request->users_id ? $this->getDecode('User', $request->users_id) : null;
+        $request->users_id = $request->users_id ? $this->getDecode($request->users_id) : null;
         $vendors  = Vendor::when($request->users_id, function($query) use($request){
                                 $query->where('users_id', $request->users_id);
                             })
@@ -35,6 +35,16 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name'      => ['required', 'string'],
+            'email'     => ['required', 'string'],
+            'users_id'  => ['required', 'exists_hashed:users,id'],
+        ]);
+        
+        if($validator->fails()){
+            return response()->json($validator->messages(), 200);
+        }
+
         $vendor = new \App\Vendor ([
             'name'      => $request->name,
             'email'     => $request->email,
@@ -58,7 +68,7 @@ class VendorController extends Controller
      */
     public function show($id)
     {
-        $id         = $id ? $this->getDecode('Vendor', $id) : null;
+        $id         = $id ? $this->getDecode($id) : null;
         $vendors    = Vendor::findOrFail($id);
         return response()->json($vendors, 200);
     }

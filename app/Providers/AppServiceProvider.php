@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Validator\CustomValidator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Extend exist validator
+        Validator::resolver(function($translator, $data, $rules, $messages)
+        {
+            return new CustomValidator($translator, $data, $rules, $messages);
+        });
     }
+
 }
