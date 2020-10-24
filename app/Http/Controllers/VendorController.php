@@ -18,7 +18,7 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        $request->users_id = $this->getDecode('User', $request->users_id);
+        $request->users_id = $request->users_id ? $this->getDecode('User', $request->users_id) : null;
         $vendors  = Vendor::when($request->users_id, function($query) use($request){
                                 $query->where('users_id', $request->users_id);
                             })
@@ -35,7 +35,19 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $vendor = new \App\Vendor ([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'users_id'  => $request->users_id
+        ]);
+
+        $saveVendor = $vendor->save();
+        if ($saveVendor) {
+            return response()->json(['message' => 'Successfully created vendor information!'], 200);
+        }
+        else {
+            return response()->json(['message' => 'Failed to save!'], 202);
+        }
     }
 
     /**
@@ -46,7 +58,8 @@ class VendorController extends Controller
      */
     public function show($id)
     {
-        $vendors  = Vendor::findOrFail($id);
+        $id         = $id ? $this->getDecode('Vendor', $id) : null;
+        $vendors    = Vendor::findOrFail($id);
         return response()->json($vendors, 200);
     }
 

@@ -10,7 +10,7 @@ trait HashidsTrait
     {
         $className      = 'App\\' . $model;
         $model          = new $className;
-        $this->hashids  = new Hashids($model->getTable(), 10);
+        $this->hashids  = new Hashids('', 10);
         return $this->hashids->decode($hashid)[0];
     }
 }
