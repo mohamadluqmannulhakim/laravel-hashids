@@ -12,14 +12,7 @@ class CustomValidator extends BaseValidator
     public function validateExistsHashed($attribute, $value, $parameters, $validator)
     {
         // Decode hashed value(s)
-        if (is_array($value)) {
-            $value = array_map(function ($item) {
-                return $this->getDecode($item);
-            }, $value);
-        } else {
-            $value = $this->getDecode($value);
-        }
-
+        $value = $this->getDecode($value);
         return $this->validateExists($attribute, $value, $parameters);
     }
     

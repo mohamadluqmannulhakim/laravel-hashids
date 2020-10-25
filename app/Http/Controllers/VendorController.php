@@ -18,9 +18,10 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        $request->users_id = $request->users_id ? $this->getDecode($request->users_id) : null;
-        $vendors  = Vendor::when($request->users_id, function($query) use($request){
-                                $query->where('users_id', $request->users_id);
+        $hashedIdAttrArr    = array('users_id_1', 'users_id_2');
+        $request            = ($request->users_id_1 || $request->users_id_2) ? $this->getDecode($request, $hashedIdAttrArr) : null;
+        $vendors            = Vendor::when($request->users_id_1, function($query) use($request){
+                                $query->where('users_id', $request->users_id_1);
                             })
                             ->orderBy('name')
                             ->paginate(10);

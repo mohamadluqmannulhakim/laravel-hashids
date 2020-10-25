@@ -47,11 +47,10 @@ return [
             'length' => 'your-length-integer',
         ],
 
-        \App\User::class => [
-            'salt' => \App\User::class.'7623e9b0009feff8e024a689d6ef59ce',
-            'length' => 5,
-        ],
-
     ],
 
+    'custom_hash' => [
+        'salt' => env('HASHIDS', ''),
+        'length' => 10
+    ]
 ];
