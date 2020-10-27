@@ -18,6 +18,14 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
+        $vendors            = Vendor::with('user')
+                            ->orderBy('name')
+                            ->paginate(10);
+        return response()->json($vendors, 200);
+    }
+    
+    public function search(Request $request)
+    {
         $hashedIdAttrArr    = array('users_id_1', 'users_id_2');
         $request            = ($request->users_id_1 || $request->users_id_2) ? $this->getDecode($request, $hashedIdAttrArr) : null;
         $vendors            = Vendor::when($request->users_id_1, function($query) use($request){
@@ -69,8 +77,7 @@ class VendorController extends Controller
      */
     public function show($id)
     {
-        $id         = $id ? $this->getDecode($id) : null;
-        $vendors    = Vendor::findOrFail($id);
+        $vendors    = Vendor::with('user')->findOrFail($id);
         return response()->json($vendors, 200);
     }
 

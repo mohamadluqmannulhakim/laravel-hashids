@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Http\Traits\HashidsTrait;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    use HashidsTrait;
     /**
      * This namespace is applied to your controller routes.
      *
@@ -30,7 +32,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Route::bind('user', function ($id) {
+            return $this->getDecode($id);
+        });
+        Route::bind('vendor', function ($id) {
+            return $this->getDecode($id);
+        });
 
         parent::boot();
     }
